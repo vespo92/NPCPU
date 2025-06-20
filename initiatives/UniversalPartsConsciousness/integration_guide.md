@@ -5,8 +5,8 @@
 Universal Parts Consciousness (UPC) leverages NPCPU's consciousness framework to transform mechanical parts into aware entities that learn from their collective experiences.
 
 ## Repository
-- **Main Repo**: `github.com/[your-org]/universal-parts-consciousness`
-- **Status**: Conceptual Design
+- **Main Repo**: [github.com/vespo92/UniversalPartsConsciousness](https://github.com/vespo92/UniversalPartsConsciousness)
+- **Status**: Active Development
 - **NPCPU Version**: 1.0.0+
 
 ## NPCPU Integration Points

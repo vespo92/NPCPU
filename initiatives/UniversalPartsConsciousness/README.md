@@ -1,7 +1,7 @@
 # Universal Parts Consciousness (UPC) - NPCPU Initiative
 
 > **Note**: This is documentation for the UPC initiative within NPCPU. 
-> The actual UPC code lives in its own repository: [github.com/[your-org]/UniversalPartsConsciousness](https://github.com/[your-org]/UniversalPartsConsciousness)
+> The actual UPC code lives in its own repository: [github.com/vespo92/UniversalPartsConsciousness](https://github.com/vespo92/UniversalPartsConsciousness)
 
 ## Vision
 

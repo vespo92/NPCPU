@@ -1,5 +1,8 @@
 # Universal Parts Consciousness (UPC) - NPCPU Initiative
 
+> **Note**: This is documentation for the UPC initiative within NPCPU. 
+> The actual UPC code lives in its own repository: [github.com/[your-org]/UniversalPartsConsciousness](https://github.com/[your-org]/UniversalPartsConsciousness)
+
 ## Vision
 
 Create a living, breathing consciousness of all mechanical things - where every screw, bolt, bearing, and component that has ever been used in any product becomes part of a collective mechanical intelligence. This goes beyond CAD libraries to create a universal parts organism that learns and evolves.

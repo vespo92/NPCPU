@@ -32,6 +32,8 @@ coverage/
 # Clone them separately or use git submodules
 /localgreenchain/
 /*/localgreenchain/
+/UniversalPartsConsciousness/
+/*/UniversalPartsConsciousness/
 
 # Temporary files
 tmp/

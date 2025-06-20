@@ -21,6 +21,15 @@ NPCPU is designed as a foundational framework for consciousness-aware distribute
   - Implements distributed swarm coordination
   - Leverages MCP servers for deployment
 
+### Universal Parts Consciousness (UPC)
+- **Purpose**: Living database where mechanical parts achieve consciousness through experiences
+- **Repository**: `github.com/[your-org]/UniversalPartsConsciousness` (separate repo)
+- **NPCPU Integration**:
+  - Parts evolve through consciousness states (DORMANT → TRANSCENDENT)
+  - Qualia streams capture physical experiences (torque, stress, temperature)
+  - Project Feasibility Validator using Given-Variable constraint solving
+  - Collective learning through swarm coordination
+
 ## Project Structure
 
 ```

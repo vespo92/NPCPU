@@ -1,0 +1,19 @@
+{
+  "name": "npcpu-mcp-server",
+  "version": "1.0.0",
+  "description": "Custom MCP server for NPCPU and LocalGreenChain",
+  "main": "npcpu-mcp-server.js",
+  "type": "module",
+  "bin": {
+    "npcpu-mcp-server": "./npcpu-mcp-server.js"
+  },
+  "scripts": {
+    "start": "node npcpu-mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0"
+  },
+  "keywords": ["mcp", "npcpu", "localgreenchain", "claude"],
+  "author": "NPCPU Collective",
+  "license": "MIT"
+}

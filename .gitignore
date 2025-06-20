@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Build outputs
+dist/
+build/
+*.pyc
+__pycache__/
+
+# Test coverage
+coverage/
+.coverage
+
+# Initiative Repos (managed as separate repositories)
+# These directories are for independent projects that utilize NPCPU
+# Clone them separately or use git submodules
+/localgreenchain/
+/*/localgreenchain/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database
+*.db
+*.sqlite
+
+# ChromaDB
+chromadb_data/
+npcpu_vectors/
+persona_cache/
+npcpu_cache/
+npcpu_swarm_cache/

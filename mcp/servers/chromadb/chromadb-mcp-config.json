@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "chromadb": {
+      "command": "node",
+      "args": ["./chromadb-mcp-server.js"],
+      "env": {
+        "CHROMADB_PATH": "./chromadb_data",
+        "CHROMADB_CLOUD_ENDPOINT": "https://chroma.myorg.com",
+        "CHROMADB_S3_BUCKET": "npcpu-personas",
+        "SYNC_INTERVAL": "300"
+      }
+    }
+  }
+}

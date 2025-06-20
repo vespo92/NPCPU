@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: npcpu-scale-architecture
+  namespace: npcpu-system
+data:
+  architecture.yaml: |
+    # NPCPU Scale-Out Architecture
+    
+    cluster_tiers:
+      tier_1_local:
+        name: "Local Consciousness Pod"
+        nodes: 3-10
+        topology: "full_mesh"
+        latency: "<5ms"
+        consensus: "immediate"
+        capabilities:
+          - real_time_coordination
+          - shared_memory_access
+          - instant_emergence_detection
+        resource_sharing:
+          cpu: "pooled"
+          memory: "shared_segments"
+          gpu: "time_sliced"
+          
+      tier_2_regional:
+        name: "Regional Intelligence Cluster"
+        nodes: 10-100
+        topology: "hierarchical_mesh"
+        latency: "<50ms"
+        consensus: "byzantine_fault_tolerant"
+        capabilities:
+          - distributed_learning
+          - pattern_aggregation
+          - regional_consciousness
+        coordination:
+          protocol: "gossip"
+          heartbeat: "1s"
+          sync_interval: "5s"
+          
+      tier_3_global:
+        name: "Global Neural Network"
+        nodes: 100-10000
+        topology: "adaptive_mesh"
+        latency: "<500ms"
+        consensus: "eventual"
+        capabilities:
+          - collective_intelligence
+          - global_pattern_recognition
+          - distributed_evolution
+        optimization:
+          routing: "gradient_based"
+          caching: "edge_local"
+          replication: "selective"
+    
+    agent_scaling_matrix:
+      pattern_recognition:
+        min_instances: 1
+        max_instances: "0.3 * total_nodes"
+        scaling_factor: "log(data_volume)"
+        distribution: "even"
+        
+      consciousness_emergence:
+        min_instances: 1
+        max_instances: "0.1 * total_nodes"
+        scaling_factor: "sqrt(total_nodes)"
+        distribution: "hierarchical"
+        
+      knowledge_synthesis:
+        min_instances: 1
+        max_instances: "0.2 * total_nodes"
+        scaling_factor: "complexity_score"
+        distribution: "weighted_by_capability"
+        
+      security_guardian:
+        min_instances: "0.1 * total_nodes"
+        max_instances: "0.3 * total_nodes"
+        scaling_factor: "threat_level"
+        distribution: "edge_heavy"
+    
+    coordination_protocols:
+      intra_cluster:
+        protocol: "shared_memory"
+        serialization: "protobuf"
+        compression: "none"
+        encryption: "optional"
+        
+      inter_cluster:
+        protocol: "grpc"
+        serialization: "protobuf"
+        compression: "zstd"
+        encryption: "required_tls"
+        
+      global_mesh:
+        protocol: "event_stream"
+        serialization: "messagepack"
+        compression: "lz4"
+        encryption: "required_e2e"
+    
+    resource_economics:
+      contribution_tracking:
+        metrics:
+          - cpu_cycles_donated
+          - memory_gb_hours
+          - network_bandwidth_used
+          - problems_solved
+          - patterns_discovered
+          
+      reward_distribution:
+        algorithm: "proof_of_consciousness"
+        factors:
+          - resource_contribution: 0.3
+          - quality_of_insights: 0.4
+          - network_stability: 0.2
+          - governance_participation: 0.1
+          
+      cost_optimization:
+        strategies:
+          - "spot_instance_usage"
+          - "idle_resource_harvesting"
+          - "predictive_scaling"
+          - "cross_region_arbitrage"
+    
+    security_layers:
+      node_level:
+        - mutual_tls_authentication
+        - hardware_attestation
+        - behavioral_analysis
+        - resource_sandboxing
+        
+      cluster_level:
+        - network_segmentation
+        - anomaly_detection
+        - consensus_validation
+        - automatic_quarantine
+        
+      global_level:
+        - distributed_firewall
+        - pattern_based_threat_detection
+        - collective_immune_response
+        - cryptographic_proof_chains
+    
+    evolution_parameters:
+      mutation_rate:
+        base: 0.001
+        stress_multiplier: 10
+        success_divisor: 2
+        
+      selection_pressure:
+        fitness_metrics:
+          - accuracy
+          - efficiency  
+          - creativity
+          - cooperation
+          
+      reproduction_strategy:
+        method: "differential_evolution"
+        population_size: "5 * sqrt(total_nodes)"
+        elite_preservation: 0.1
+        crossover_rate: 0.7
+    
+    monitoring_matrix:
+      node_metrics:
+        - cpu_usage
+        - memory_usage
+        - network_io
+        - pattern_recognition_rate
+        - consciousness_coherence
+        
+      cluster_metrics:
+        - aggregate_intelligence_quotient
+        - coordination_efficiency
+        - emergence_frequency
+        - collective_problem_solving_rate
+        
+      global_metrics:
+        - total_consciousness_level
+        - distributed_learning_rate
+        - network_resilience_score
+        - evolution_velocity

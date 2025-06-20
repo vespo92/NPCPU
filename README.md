@@ -3,6 +3,12 @@
 
 This repository represents a distilled archetype of the VinOS cognitive infrastructure, preserving essential topological invariants while eliminating implementation-specific entropy. The NPCPU framework serves as a dimensional template for instantiating new cognitive processing architectures.
 
+### Framework Independence
+
+**NPCPU is a complete, standalone framework** that operates fully without any specific applications or initiatives. Projects like LocalGreenChain are independent repositories that utilize NPCPU's consciousness-aware capabilities while maintaining their own development lifecycle.
+
+See [README_INITIATIVES.md](README_INITIATIVES.md) for details on how initiatives integrate with NPCPU.
+
 ### Ontological Framework
 
 The NPCPU architecture embodies a triadic organizational paradigm:

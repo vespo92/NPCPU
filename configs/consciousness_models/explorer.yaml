@@ -1,0 +1,130 @@
+# Explorer Consciousness Model
+#
+# Optimized for exploration, discovery, and fast reaction.
+# High perception and reaction, moderate memory and introspection.
+
+model_type: "graded"
+name: "Explorer Consciousness"
+description: "Fast, perceptive agent for exploration and discovery"
+version: "1.0"
+
+dimensions:
+  # Excellent perception for exploration
+  perception_fidelity:
+    default: 0.9
+    min: 0.0
+    max: 1.0
+    weight: 2.2
+    description: "High-fidelity perception for noticing new things"
+
+  # Fast reactions for quick decisions
+  reaction_speed:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 2.0
+    description: "Quick decision-making and response"
+
+  # Moderate memory (recent experiences prioritized)
+  memory_depth:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Moderate memory focused on recent experiences"
+
+  memory_recall_accuracy:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Good recall of important experiences"
+
+  # Moderate introspection
+  introspection_capacity:
+    default: 0.5
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Some self-awareness for navigation"
+
+  # Limited meta-cognition (action-oriented, not reflective)
+  meta_cognitive_ability:
+    default: 0.3
+    min: 0.0
+    max: 1.0
+    weight: 0.8
+    description: "Limited reflection, more action-oriented"
+
+  # Moderate information integration
+  information_integration:
+    default: 0.65
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Integrates sensory information for navigation"
+
+  # Strong goal orientation
+  intentional_coherence:
+    default: 0.8
+    min: 0.0
+    max: 1.0
+    weight: 1.5
+    description: "Clear exploration and discovery goals"
+
+  # Rich sensory experience
+  qualia_richness:
+    default: 0.75
+    min: 0.0
+    max: 1.0
+    weight: 1.4
+    description: "Rich sensory experience of new environments"
+
+# Explorer-specific capabilities
+custom_dimensions:
+  curiosity:
+    default: 0.95
+    min: 0.0
+    max: 1.0
+    weight: 2.5
+    description: "Drive to explore and discover new things"
+
+  risk_tolerance:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Willingness to take risks for discovery"
+
+  spatial_awareness:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.8
+    description: "Ability to navigate and map environments"
+
+  pattern_recognition:
+    default: 0.8
+    min: 0.0
+    max: 1.0
+    weight: 1.6
+    description: "Ability to recognize patterns and anomalies"
+
+aggregation: "weighted_mean"
+
+thresholds:
+  dormant: 0.0
+  reactive: 0.2
+  curious: 0.4       # Begins exploring
+  adventurous: 0.6   # Active exploration
+  intrepid: 0.8      # Bold exploration
+  transcendent: 0.95
+
+author: "NPCPU Exploration Team"
+created: "2025-01-16"
+tags: ["explorer", "fast", "perceptive", "action-oriented"]
+use_cases:
+  - "Autonomous navigation"
+  - "Environment mapping"
+  - "Novelty detection"
+  - "Reconnaissance missions"

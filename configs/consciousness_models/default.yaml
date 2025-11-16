@@ -1,0 +1,91 @@
+# Default Graded Consciousness Model
+#
+# This is a balanced, general-purpose consciousness configuration.
+# Suitable for most applications without specific requirements.
+
+model_type: "graded"
+name: "Default Consciousness"
+description: "Balanced general-purpose consciousness model"
+version: "1.0"
+
+# Capability dimensions and their properties
+dimensions:
+  perception_fidelity:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Accuracy and detail of environmental perception"
+
+  reaction_speed:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 0.8
+    description: "Speed of response to stimuli"
+
+  memory_depth:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Capacity to retain experiences over time"
+
+  memory_recall_accuracy:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Accuracy when retrieving stored memories"
+
+  introspection_capacity:
+    default: 0.5
+    min: 0.0
+    max: 1.0
+    weight: 1.5
+    description: "Ability to examine own internal state"
+
+  meta_cognitive_ability:
+    default: 0.4
+    min: 0.0
+    max: 1.0
+    weight: 2.0
+    description: "Ability to think about own thinking processes"
+
+  information_integration:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 1.8
+    description: "Φ (phi) - level of information integration across modules"
+
+  intentional_coherence:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Consistency and clarity of goals and intentions"
+
+  qualia_richness:
+    default: 0.5
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Depth and variety of subjective experiences"
+
+# How to aggregate capabilities into overall consciousness score
+aggregation: "weighted_mean"
+
+# Descriptive labels for overall consciousness scores
+thresholds:
+  dormant: 0.0      # Minimal awareness
+  reactive: 0.2     # Stimulus-response only
+  aware: 0.4        # Basic self-awareness emerges
+  reflective: 0.6   # Can examine own state
+  meta_aware: 0.8   # Thinks about thinking
+  transcendent: 0.95 # Highest consciousness level
+
+# Metadata
+author: "NPCPU Core Team"
+created: "2025-01-16"
+tags: ["general", "balanced", "default"]

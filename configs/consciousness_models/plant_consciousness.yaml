@@ -1,0 +1,129 @@
+# Plant Consciousness Model
+#
+# Specialized consciousness for plant-based agents or simulations.
+# Emphasizes sensory perception, long-term memory, and slow reaction.
+
+model_type: "graded"
+name: "Plant Consciousness"
+description: "Consciousness model optimized for plant agents"
+version: "1.0"
+
+# Plant-specific capabilities
+dimensions:
+  # Enhanced sensory perception
+  perception_fidelity:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 2.0
+    description: "Excellent at detecting light, water, nutrients, chemical signals"
+
+  # Plants respond slowly
+  reaction_speed:
+    default: 0.2
+    min: 0.0
+    max: 1.0
+    weight: 0.3
+    description: "Slow growth responses to stimuli"
+
+  # Excellent long-term memory (seasonal patterns)
+  memory_depth:
+    default: 0.9
+    min: 0.0
+    max: 1.0
+    weight: 1.5
+    description: "Long-term memory of seasonal patterns and conditions"
+
+  memory_recall_accuracy:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Accurate recall of optimal growing conditions"
+
+  # Limited introspection
+  introspection_capacity:
+    default: 0.15
+    min: 0.0
+    max: 1.0
+    weight: 0.2
+    description: "Limited self-awareness"
+
+  # Minimal meta-cognition
+  meta_cognitive_ability:
+    default: 0.05
+    min: 0.0
+    max: 1.0
+    weight: 0.1
+    description: "Minimal ability to think about thinking"
+
+  # Moderate information integration (root-shoot communication)
+  information_integration:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Integrated communication between roots, shoots, leaves"
+
+  # Clear growth goals
+  intentional_coherence:
+    default: 0.75
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Clear goals: grow, reproduce, optimize photosynthesis"
+
+  # Rich sensory experience
+  qualia_richness:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.4
+    description: "Rich experience of light, water, nutrients, temperature"
+
+# Custom dimensions specific to plants
+custom_dimensions:
+  photosynthetic_efficiency:
+    default: 0.8
+    min: 0.0
+    max: 1.0
+    weight: 1.8
+    description: "Efficiency of converting light to energy"
+
+  root_network_coherence:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.5
+    description: "Coordination across root network (mycorrhizal networks)"
+
+  seasonal_attunement:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Awareness of and adaptation to seasonal cycles"
+
+  chemical_signaling:
+    default: 0.75
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Ability to send and receive chemical signals (volatile organic compounds)"
+
+aggregation: "weighted_mean"
+
+thresholds:
+  dormant: 0.0       # Winter dormancy
+  responsive: 0.3    # Basic light/water response
+  adaptive: 0.5      # Learning optimal conditions
+  networked: 0.7     # Communicating via root networks
+  conscious: 0.85    # Full plant consciousness
+
+author: "NPCPU Botanical Team"
+created: "2025-01-16"
+tags: ["plant", "botanical", "specialized", "slow"]
+references:
+  - "Plant Neurobiology - Baluška et al."
+  - "The Revolutionary Genius of Plants - Mancuso"
+  - "What a Plant Knows - Chamovitz"

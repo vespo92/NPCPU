@@ -21,15 +21,47 @@ from .world import (
     WorldEvent
 )
 
+from .world_generator import (
+    WorldGenerator,
+    ProceduralWorld,
+    BiomeType,
+    Biome,
+    HazardType,
+    Hazard,
+    ResourceType,
+    Resource,
+    TerrainCell,
+    SimplexNoise,
+    BIOME_DEFINITIONS,
+    BIOME_RESOURCES,
+    BIOME_HAZARDS,
+)
+
 __all__ = [
+    # Population
     "Population",
     "PopulationDynamics",
     "InteractionType",
     "RelationshipType",
     "SocialNetwork",
+    # World
     "World",
     "WorldConfig",
     "Region",
     "ResourcePool",
-    "WorldEvent"
+    "WorldEvent",
+    # Procedural Generation
+    "WorldGenerator",
+    "ProceduralWorld",
+    "BiomeType",
+    "Biome",
+    "HazardType",
+    "Hazard",
+    "ResourceType",
+    "Resource",
+    "TerrainCell",
+    "SimplexNoise",
+    "BIOME_DEFINITIONS",
+    "BIOME_RESOURCES",
+    "BIOME_HAZARDS",
 ]

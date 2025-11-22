@@ -1,8 +1,8 @@
 """
 NPCPU Swarm Module
 
-Provides distributed consciousness coordination and network-based
-consciousness sharing capabilities.
+Provides distributed consciousness coordination, network-based
+consciousness sharing, and swarm intelligence patterns.
 """
 
 from .distributed_consciousness import (
@@ -12,11 +12,21 @@ from .distributed_consciousness import (
     ConsciousnessMessage,
     SwarmConsciousness
 )
+from .intelligence_patterns import (
+    SwarmIntelligenceEngine,
+    SwarmPattern,
+    SwarmAgent,
+    SharedEnvironment
+)
 
 __all__ = [
     "DistributedConsciousnessNetwork",
     "ConsciousnessNetworkConfig",
     "NetworkAgent",
     "ConsciousnessMessage",
-    "SwarmConsciousness"
+    "SwarmConsciousness",
+    "SwarmIntelligenceEngine",
+    "SwarmPattern",
+    "SwarmAgent",
+    "SharedEnvironment"
 ]

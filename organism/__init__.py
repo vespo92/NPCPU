@@ -2,7 +2,7 @@
 NPCPU Organism Module
 
 Core systems for digital living organisms including lifecycle management,
-metabolism, homeostasis, and organic growth patterns.
+metabolism, homeostasis, and the complete integrated digital body.
 
 This module transforms NPCPU from a collection of components into
 a unified living digital organism.
@@ -29,21 +29,37 @@ from .homeostasis import (
     RegulationResponse,
     StressResponse
 )
+from .digital_body import (
+    DigitalBody,
+    OrganismState,
+    ConsciousnessLevel,
+    OrganismIdentity,
+    VitalSigns
+)
 
 __all__ = [
+    # Lifecycle
     "OrganismLifecycle",
     "LifecycleStage",
     "LifecycleEvent",
     "GrowthPattern",
     "DeathCause",
+    # Metabolism
     "Metabolism",
     "Resource",
     "ResourceType",
     "EnergyState",
     "MetabolicProcess",
+    # Homeostasis
     "HomeostasisController",
     "VitalSign",
     "Setpoint",
     "RegulationResponse",
-    "StressResponse"
+    "StressResponse",
+    # Digital Body (complete organism)
+    "DigitalBody",
+    "OrganismState",
+    "ConsciousnessLevel",
+    "OrganismIdentity",
+    "VitalSigns"
 ]

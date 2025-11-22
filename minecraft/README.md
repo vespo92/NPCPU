@@ -165,27 +165,116 @@ Minecraft events affect organism mood:
 - Night time → Melatonin (rest)
 - Social interactions → Oxytocin (bonding)
 
-### Multi-Bot Ecosystem
+### Memory System
 
-Run multiple organisms for ecosystem simulation:
+Organisms remember and learn from experiences:
 
 ```python
-organisms = [
-    MinecraftOrganism(name="Alpha", config=config),
-    MinecraftOrganism(name="Beta", config=config),
-    MinecraftOrganism(name="Gamma", config=config)
-]
+from minecraft.memory import MemorySystem, MemoryType, EmotionalValence
 
-# Connect all
-for org in organisms:
-    await org.connect()
+memory = MemorySystem()
 
-# Run ecosystem
-while any(org.is_alive for org in organisms):
-    for org in organisms:
-        if org.is_alive:
-            await org.tick()
-    await asyncio.sleep(0.5)
+# Remember resource locations
+memory.remember_location(
+    Position(100, 64, 200),
+    MemoryType.RESOURCE,
+    "iron_ore_vein",
+    {"block_count": 8},
+    EmotionalValence.POSITIVE
+)
+
+# Remember dangerous areas
+memory.remember_location(
+    Position(50, 64, 50),
+    MemoryType.DANGER,
+    "creeper_spawn",
+    {},
+    EmotionalValence.NEGATIVE
+)
+
+# Recall nearby resources when needed
+resources = memory.recall_nearby(current_pos, MemoryType.RESOURCE, radius=100)
+```
+
+Memory types:
+- **Spatial**: Resource locations, danger zones, shelters
+- **Episodic**: Events and their outcomes
+- **Social**: Relationships with other entities
+- **Procedural**: Learned skills and sequences
+
+### Advanced Behaviors
+
+High-level behavior patterns:
+
+```python
+from minecraft.behaviors import BehaviorManager
+
+manager = BehaviorManager(bridge, memory)
+
+# Automatic survival (always running)
+# - Monitors health/hunger
+# - Flees from danger
+# - Seeks shelter at night
+
+# Queue crafting task
+manager.crafting.set_target("stone_pickaxe")
+manager.queue_behavior(manager.crafting)
+
+# Shelter building when night approaches
+if manager.shelter.can_execute():
+    await manager.shelter.execute()
+```
+
+Behaviors include:
+- **ShelterBehavior**: Build emergency shelter before nightfall
+- **CraftingBehavior**: Craft tools and items
+- **TradingBehavior**: Trade with villagers
+- **SurvivalBehavior**: Continuous health/safety monitoring
+
+### Colony System
+
+Run coordinated multi-agent colonies:
+
+```python
+from minecraft.colony import Colony, ColonyRole
+
+colony = Colony("AlphaColony", config)
+
+# Add members with specialized roles
+await colony.add_member("Scout1", ColonyRole.SCOUT)
+await colony.add_member("Guard1", ColonyRole.GUARD)
+await colony.add_member("Gatherer1", ColonyRole.GATHERER)
+await colony.add_member("Gatherer2", ColonyRole.GATHERER)
+await colony.add_member("Leader", ColonyRole.LEADER)
+
+# Run colony
+await colony.run(max_ticks=5000)
+```
+
+Colony features:
+- **Role Specialization**: Scout, Guard, Gatherer, Builder, Leader, Healer
+- **Shared Memory**: Colony-wide knowledge of resources and dangers
+- **Communication**: Chat-based messaging protocol
+- **Task Distribution**: Automatic task assignment based on roles
+- **Collective Defense**: Coordinated response to threats
+
+### Ecosystem Runner
+
+Main entry point for simulations:
+
+```bash
+# Single organism mode
+python minecraft/ecosystem_runner.py --mode single --host localhost
+
+# Colony mode
+python minecraft/ecosystem_runner.py --mode colony --colony-name MyColony \
+    --scouts 2 --gatherers 3 --guards 1 --leader 1
+
+# Ecosystem mode (multiple independent organisms)
+python minecraft/ecosystem_runner.py --mode ecosystem --organisms 5
+
+# With memory persistence
+python minecraft/ecosystem_runner.py --mode single --save-memories
 ```
 
 ## Commands Reference
@@ -198,19 +287,52 @@ The bot accepts these JSON commands via stdin:
 | `disconnect` | - | Disconnect |
 | `move_to` | x, y, z | Navigate to position |
 | `dig` | x, y, z | Mine a block |
+| `place` | position, block | Place a block |
 | `attack` | entity_id | Attack entity |
+| `attack_nearest_hostile` | - | Attack nearest hostile |
 | `eat` | - | Eat food from inventory |
+| `craft` | recipe, count | Craft an item |
 | `chat` | message | Send chat message |
 | `find_blocks` | block, radius | Find blocks nearby |
 | `find_entities` | type, hostile_only | Find entities |
+| `get_state` | - | Get bot state |
+| `get_world_state` | - | Get world info |
+
+## Module Structure
+
+```
+minecraft/
+├── __init__.py           # Package exports
+├── bridge.py             # Low-level Mineflayer communication
+├── organism_adapter.py   # NPCPU-to-Minecraft system mapping
+├── world_adapter.py      # World/biome mapping
+├── memory.py             # Spatial/episodic/social memory
+├── behaviors.py          # High-level behavior patterns
+├── colony.py             # Multi-agent coordination
+├── ecosystem_runner.py   # Main entry point
+├── bot.js                # Mineflayer bot (Node.js)
+├── package.json          # Node dependencies
+└── README.md             # This file
+```
+
+## Implemented Features
+
+- [x] Building shelter at night
+- [x] Tool crafting and use
+- [x] Trading with villagers
+- [x] Multi-bot communication
+- [x] Territory management
+- [x] Memory of locations
+- [x] Learning from experience
+- [x] Colony coordination
+- [x] Role-based specialization
+- [x] Shared knowledge systems
 
 ## Future Plans
 
-- [ ] Building shelter at night
-- [ ] Tool crafting and use
-- [ ] Trading with villagers
-- [ ] Multi-bot communication
-- [ ] Territory marking
-- [ ] Breeding/reproduction in Minecraft
-- [ ] Memory of locations
-- [ ] Learning from experience
+- [ ] Breeding/reproduction mechanics
+- [ ] Evolution and trait inheritance
+- [ ] Cross-world migration
+- [ ] Advanced trading economy
+- [ ] Structure blueprints
+- [ ] Voice/visual communication

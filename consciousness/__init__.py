@@ -1,7 +1,8 @@
 """
 NPCPU Consciousness Module
 
-Advanced consciousness models including adaptive and multi-modal consciousness.
+Advanced consciousness models including adaptive, multi-modal,
+and transferable consciousness.
 """
 
 from .adaptive_consciousness import (
@@ -17,6 +18,14 @@ from .multimodal_consciousness import (
     MultiModalPerception,
     IntegratedPerception
 )
+from .transfer import (
+    ConsciousnessTransferProtocol,
+    DistributedConsciousnessManager,
+    TransferMode,
+    TransferResult,
+    ConsciousnessSnapshot,
+    Agent
+)
 
 __all__ = [
     "AdaptiveConsciousness",
@@ -27,5 +36,11 @@ __all__ = [
     "ModalityProcessor",
     "CrossModalIntegrator",
     "MultiModalPerception",
-    "IntegratedPerception"
+    "IntegratedPerception",
+    "ConsciousnessTransferProtocol",
+    "DistributedConsciousnessManager",
+    "TransferMode",
+    "TransferResult",
+    "ConsciousnessSnapshot",
+    "Agent"
 ]

@@ -792,6 +792,9 @@ class InMemoryStorage:
 # Register the in-memory backend
 StorageBackendRegistry.register("memory", InMemoryStorage)
 
+# Alias for backward compatibility
+InMemoryVectorStorage = InMemoryStorage
+
 
 # ============================================================================
 # Example Usage

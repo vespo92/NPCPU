@@ -8,16 +8,36 @@ import os
 import sys
 import tempfile
 import shutil
-import numpy as np
 from typing import Dict, Any
 
 # Add parent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from protocols.consciousness import GradedConsciousness, ConsciousnessAdapter
-from protocols.storage import InMemoryStorage, DistanceMetric
-from protocols.transformations import Manifold, TransformationLibrary
-from factory.consciousness_factory import ConsciousnessFactory
+# Try to import numpy (optional for core tests)
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    np = None
+    HAS_NUMPY = False
+
+# Try to import protocol modules (require numpy)
+HAS_PROTOCOLS = False
+try:
+    from protocols.consciousness import GradedConsciousness, ConsciousnessAdapter
+    from protocols.storage import InMemoryStorage, DistanceMetric
+    from protocols.transformations import Manifold, TransformationLibrary
+    from factory.consciousness_factory import ConsciousnessFactory
+    HAS_PROTOCOLS = True
+except ImportError:
+    # Protocol modules not available (likely missing numpy)
+    GradedConsciousness = None
+    ConsciousnessAdapter = None
+    InMemoryStorage = None
+    DistanceMetric = None
+    Manifold = None
+    TransformationLibrary = None
+    ConsciousnessFactory = None
 
 
 # ============================================================================
@@ -50,12 +70,14 @@ def event_loop():
 
 
 # ============================================================================
-# Consciousness Fixtures
+# Consciousness Fixtures (require numpy/protocols)
 # ============================================================================
 
 @pytest.fixture
 def basic_consciousness():
     """Create basic consciousness for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return GradedConsciousness(
         perception_fidelity=0.7,
         reaction_speed=0.6,
@@ -72,6 +94,8 @@ def basic_consciousness():
 @pytest.fixture
 def high_consciousness():
     """Create high-level consciousness for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return GradedConsciousness(
         perception_fidelity=0.9,
         reaction_speed=0.8,
@@ -88,6 +112,8 @@ def high_consciousness():
 @pytest.fixture
 def low_consciousness():
     """Create low-level consciousness for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return GradedConsciousness(
         perception_fidelity=0.2,
         reaction_speed=0.3,
@@ -104,16 +130,20 @@ def low_consciousness():
 @pytest.fixture
 def consciousness_adapter():
     """Create consciousness adapter for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return ConsciousnessAdapter()
 
 
 # ============================================================================
-# Storage Fixtures
+# Storage Fixtures (require numpy/protocols)
 # ============================================================================
 
 @pytest.fixture
 async def storage():
     """Create in-memory storage for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     storage = InMemoryStorage()
 
     # Create test collection
@@ -129,6 +159,8 @@ async def storage():
 @pytest.fixture
 async def storage_with_data():
     """Create storage with test data"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     storage = InMemoryStorage()
 
     await storage.create_collection(
@@ -153,12 +185,14 @@ async def storage_with_data():
 
 
 # ============================================================================
-# Transformation Fixtures
+# Transformation Fixtures (require numpy/protocols)
 # ============================================================================
 
 @pytest.fixture
 def simple_manifold():
     """Create simple manifold for testing"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     vectors = np.random.randn(50, 64)
     return Manifold(vectors=vectors)
 
@@ -166,6 +200,8 @@ def simple_manifold():
 @pytest.fixture
 def complex_manifold():
     """Create complex manifold with adjacency matrix"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     vectors = np.random.randn(100, 128)
 
     # Create random adjacency matrix (sparse)
@@ -189,6 +225,8 @@ def complex_manifold():
 @pytest.fixture
 def transformation_library():
     """Return transformation library"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return TransformationLibrary
 
 
@@ -247,22 +285,28 @@ thresholds:
 @pytest.fixture
 def consciousness_factory(temp_config_dir):
     """Create consciousness factory with temp config dir"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return ConsciousnessFactory(config_dir=temp_config_dir)
 
 
 @pytest.fixture
 def real_consciousness_factory():
     """Create consciousness factory with real config dir"""
+    if not HAS_PROTOCOLS:
+        pytest.skip("Requires protocols module (numpy)")
     return ConsciousnessFactory()
 
 
 # ============================================================================
-# Helper Fixtures
+# Helper Fixtures (require numpy)
 # ============================================================================
 
 @pytest.fixture
 def random_vectors():
     """Generate random test vectors"""
+    if not HAS_NUMPY:
+        pytest.skip("Requires numpy")
     def _generate(num_vectors: int, dimension: int):
         return np.random.randn(num_vectors, dimension)
     return _generate
@@ -271,6 +315,56 @@ def random_vectors():
 @pytest.fixture
 def similarity_calculator():
     """Calculate cosine similarity between vectors"""
-    def _calculate(vec1: np.ndarray, vec2: np.ndarray) -> float:
+    if not HAS_NUMPY:
+        pytest.skip("Requires numpy")
+    def _calculate(vec1, vec2) -> float:
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
     return _calculate
+
+
+# ============================================================================
+# Core Module Fixtures (for new abstraction layer tests)
+# ============================================================================
+
+@pytest.fixture
+def fresh_event_bus():
+    """Provide a fresh event bus for each test"""
+    from core.events import EventBus
+    return EventBus()
+
+
+@pytest.fixture
+def fresh_hook_manager():
+    """Provide a fresh hook manager for each test"""
+    from core.plugins import HookManager
+    return HookManager()
+
+
+@pytest.fixture
+def simple_organism():
+    """Provide a simple organism for testing"""
+    from core.simple_organism import SimpleOrganism
+    return SimpleOrganism("TestOrganism")
+
+
+@pytest.fixture
+def simple_population():
+    """Provide a simple population for testing"""
+    from core.simple_organism import SimplePopulation
+    return SimplePopulation("TestPopulation")
+
+
+@pytest.fixture(autouse=True)
+def reset_global_state():
+    """Reset global state between tests"""
+    from core import events, plugins
+
+    # Store original global instances
+    original_bus = events._global_bus
+    original_manager = plugins._global_manager
+
+    yield
+
+    # Restore original state
+    events._global_bus = original_bus
+    plugins._global_manager = original_manager

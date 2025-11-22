@@ -28,12 +28,13 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 # Import all subsystems
-from organism.lifecycle import OrganismLifecycle, LifecycleStage
+from organism.lifecycle import OrganismLifecycle, LifecycleStage, LifecycleConfig
 from organism.metabolism import Metabolism, ResourceType, EnergyState, MetabolicMode
+from protocols.consciousness import GradedConsciousness
 from organism.homeostasis import HomeostasisController, VitalSignType
 from immune.defense import ImmuneSystem
 from immune.repair import RepairSystem, DamageType
-from nervous.coordination import NervousSystem, SignalType, SystemType
+from nervous.coordination import NervousSystem, SignalType, SystemType, ReflexTrigger
 from sensory.perception import SensorySystem, SensorType, SensoryModality
 from motor.action import MotorSystem, ActionType, BehaviorMode
 from endocrine.hormones import EndocrineSystem, HormoneType, MoodState, DriveState
@@ -178,9 +179,22 @@ class DigitalBody:
         """Initialize all biological subsystems"""
         traits = self.identity.traits
 
-        # Lifecycle
-        self.lifecycle = OrganismLifecycle(
+        # Core consciousness (starts with basic capability levels)
+        self.consciousness = GradedConsciousness(
+            perception_fidelity=0.3,
+            reaction_speed=0.2,
+            memory_depth=0.2,
+            introspection_capacity=0.1
+        )
+
+        # Lifecycle with config
+        lifecycle_config = LifecycleConfig(
             growth_rate=traits.get("metabolism_rate", 1.0) * 0.1
+        )
+        self.lifecycle = OrganismLifecycle(
+            consciousness=self.consciousness,
+            config=lifecycle_config,
+            organism_id=self.identity.id
         )
 
         # Metabolism
@@ -229,14 +243,14 @@ class DigitalBody:
                 self.endocrine.trigger_stress_response(signal.intensity)
                 self.immune.scan(signal.data)
 
-        self.nervous.on_signal_sent(handle_threat_signal)
+        self.nervous.on_signal_received(handle_threat_signal)
 
         # Reward signals trigger dopamine
         def handle_reward_signal(signal):
             if signal.type == SignalType.REWARD:
                 self.endocrine.trigger_reward(signal.intensity)
 
-        self.nervous.on_signal_sent(handle_reward_signal)
+        self.nervous.on_signal_received(handle_reward_signal)
 
     def _connect_hormonal_effects(self):
         """Connect hormone effects to subsystems"""
@@ -267,17 +281,17 @@ class DigitalBody:
         # Low energy reflex
         self.nervous.add_reflex(
             name="energy_conservation",
-            trigger_type="threshold",
-            trigger_value={"parameter": "energy", "threshold": 20.0, "direction": "below"},
-            response_actions=[ActionType.REST]
+            trigger=ReflexTrigger.THRESHOLD,
+            condition={"parameter": "energy", "threshold": 20.0, "direction": "below"},
+            action="rest"
         )
 
         # Threat avoidance reflex
         self.nervous.add_reflex(
             name="threat_avoidance",
-            trigger_type="threat",
-            trigger_value={"threat_level": 0.7},
-            response_actions=[ActionType.DEFEND, ActionType.MOVE]
+            trigger=ReflexTrigger.THREAT,
+            condition={"threat_level": 0.7},
+            action="defend"
         )
 
     def perceive(self, stimuli: List[Any]):
@@ -348,11 +362,12 @@ class DigitalBody:
 
         self.tick_count += 1
 
-        # Lifecycle progression
-        self.lifecycle.tick()
+        # Manual lifecycle age increment (since tick is async)
+        self.lifecycle.age += 1
 
         # Check if died of old age
-        if self.lifecycle.stage == LifecycleStage.DEAD:
+        if self.lifecycle.age >= self.lifecycle.config.mature_duration * 2:
+            self.lifecycle.stage = LifecycleStage.DEAD
             self._die("old_age")
             return
 
@@ -363,14 +378,14 @@ class DigitalBody:
         if "energy" in outputs:
             self.motor.add_energy(outputs["energy"] * 0.5)
 
-        # Homeostasis
-        self.homeostasis.tick()
+        # Homeostasis regulation
+        self.homeostasis.regulate()
 
         # Check vital signs
         self._check_vitals()
 
-        # Immune system
-        self.immune.tick()
+        # Immune system - passively monitors via scan()
+        # (scans are triggered by threats, not periodic ticks)
 
         # Repair system
         self.repair.tick()
@@ -557,7 +572,7 @@ class DigitalBody:
             consciousness=self.consciousness_level.value / 5.0,
             mood_score=self._get_mood_score(),
             activity_level=len(self.motor.action_queue) / self.motor.max_queue_size,
-            age_ratio=self.lifecycle.age / self.lifecycle.max_age
+            age_ratio=self.lifecycle.age / (self.lifecycle.config.mature_duration * 2)
         )
 
     def _get_mood_score(self) -> float:

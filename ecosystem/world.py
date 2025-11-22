@@ -712,11 +712,10 @@ if __name__ == "__main__":
 
     # Run world simulation
     print("\n4. Running world simulation...")
-    events_triggered = 0
+    event_counter = [0]  # Use list to allow modification in nested function
 
     def on_event(event):
-        nonlocal events_triggered
-        events_triggered += 1
+        event_counter[0] += 1
         print(f"   Event: {event.type.value} (magnitude={event.magnitude:.2f})")
 
     world.on_event_started(on_event)
@@ -746,4 +745,4 @@ if __name__ == "__main__":
                 if not isinstance(value, dict):
                     print(f"   {key}: {value}")
 
-    print(f"\n   Total events triggered: {events_triggered}")
+    print(f"\n   Total events triggered: {event_counter[0]}")

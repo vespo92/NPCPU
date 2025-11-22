@@ -95,6 +95,31 @@ Examples:
         help="Save results to file"
     )
 
+    parser.add_argument(
+        "--save-state",
+        action="store_true",
+        help="Save complete simulation state (can be resumed)"
+    )
+
+    parser.add_argument(
+        "--load",
+        type=str,
+        default=None,
+        help="Load and resume from a saved snapshot ID"
+    )
+
+    parser.add_argument(
+        "--list-saves",
+        action="store_true",
+        help="List available saved simulations"
+    )
+
+    parser.add_argument(
+        "--save-dir",
+        default="./simulation_saves",
+        help="Directory for save files"
+    )
+
     return parser.parse_args()
 
 
@@ -102,16 +127,53 @@ def main():
     """Main entry point"""
     args = parse_args()
 
-    # Create configuration
-    config = SimulationConfig(
-        name=args.name,
-        seed=args.seed,
-        max_ticks=args.ticks,
-        initial_population=args.population,
-        carrying_capacity=args.capacity,
-        output_dir=args.output,
-        verbose=not args.quiet
-    )
+    # Import persistence module
+    from simulation.persistence import SimulationPersistence, restore_simulation
+
+    persistence = SimulationPersistence(args.save_dir)
+
+    # Handle list-saves command
+    if args.list_saves:
+        saves = persistence.list_saves()
+        if not saves:
+            print("No saved simulations found.")
+            return 0
+
+        print(f"\nFound {len(saves)} saved simulation(s):\n")
+        for save in saves:
+            print(f"  ID: {save.get('snapshot_id', 'unknown')}")
+            print(f"  Name: {save.get('simulation_name', 'N/A')}")
+            print(f"  Tick: {save.get('tick', 'N/A')}")
+            print(f"  Organisms: {save.get('organisms', 'N/A')}")
+            print(f"  Created: {save.get('created_at', 'N/A')}")
+            if save.get('description'):
+                print(f"  Description: {save['description']}")
+            print()
+        return 0
+
+    # Handle loading a saved simulation
+    if args.load:
+        print(f"Loading simulation from: {args.load}")
+        try:
+            snapshot = persistence.load(args.load)
+            sim = restore_simulation(snapshot)
+            print(f"Restored simulation '{snapshot.simulation_name}' at tick {snapshot.tick}")
+            print(f"Organisms: {len(sim.population.organisms)}")
+        except FileNotFoundError:
+            print(f"Error: No snapshot found with ID '{args.load}'")
+            return 1
+    else:
+        # Create new simulation
+        config = SimulationConfig(
+            name=args.name,
+            seed=args.seed,
+            max_ticks=args.ticks,
+            initial_population=args.population,
+            carrying_capacity=args.capacity,
+            output_dir=args.output,
+            verbose=not args.quiet
+        )
+        sim = Simulation(config)
 
     print("""
     ╔══════════════════════════════════════════════════════════════╗
@@ -128,25 +190,39 @@ def main():
     """)
 
     print(f"Configuration:")
-    print(f"  Name: {config.name}")
-    print(f"  Initial Population: {config.initial_population}")
-    print(f"  Max Ticks: {config.max_ticks}")
-    print(f"  Carrying Capacity: {config.carrying_capacity}")
-    print(f"  Seed: {config.seed or 'random'}")
+    print(f"  Name: {sim.config.name}")
+    print(f"  Initial Population: {sim.config.initial_population}")
+    print(f"  Max Ticks: {sim.config.max_ticks}")
+    print(f"  Carrying Capacity: {sim.config.carrying_capacity}")
+    print(f"  Seed: {sim.config.seed or 'random'}")
+    if args.load:
+        print(f"  Resumed from tick: {sim.tick_count}")
 
-    # Create and run simulation
-    sim = Simulation(config)
+    from simulation.runner import SimulationState
 
+    interrupted = False
     try:
         sim.run()
     except KeyboardInterrupt:
         print("\n\nSimulation interrupted by user.")
-        sim.state = "interrupted"
+        sim.state = SimulationState.PAUSED
+        interrupted = True
+
+        # Offer to save on interrupt
+        if args.save_state or input("\nSave current state? (y/n): ").lower() == 'y':
+            snapshot_id = persistence.save(sim, description="Interrupted simulation")
+            print(f"State saved with ID: {snapshot_id}")
+            print(f"Resume with: python run_simulation.py --load {snapshot_id}")
 
     # Save results if requested
     if args.save:
         filepath = sim.save_results()
         print(f"Results saved to: {filepath}")
+
+    # Save complete state if requested (only if not already saved during interrupt)
+    if args.save_state and not interrupted:
+        snapshot_id = persistence.save(sim, description="Completed simulation")
+        print(f"State saved with ID: {snapshot_id}")
 
     # Return final population count as exit code hint
     return 0 if len(sim.population.organisms) > 0 else 1

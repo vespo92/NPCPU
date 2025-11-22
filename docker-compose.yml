@@ -1,0 +1,115 @@
+# NPCPU Docker Compose Configuration
+# Run digital life simulations with monitoring
+
+version: '3.8'
+
+services:
+  # ==========================================================================
+  # Simulation Runner
+  # ==========================================================================
+  simulation:
+    build:
+      context: .
+      target: production
+    container_name: npcpu-simulation
+    volumes:
+      - simulation_output:/app/simulation_output
+      - simulation_saves:/app/simulation_saves
+    environment:
+      - NPCPU_SEED=42
+      - NPCPU_POPULATION=20
+      - NPCPU_TICKS=5000
+    command: >
+      python run_simulation.py
+      --population ${NPCPU_POPULATION:-20}
+      --ticks ${NPCPU_TICKS:-5000}
+      --seed ${NPCPU_SEED:-42}
+      --save-state
+      --save
+    restart: "no"
+
+  # ==========================================================================
+  # Monitoring Server
+  # ==========================================================================
+  monitoring:
+    build:
+      context: .
+      target: monitoring
+    container_name: npcpu-monitoring
+    ports:
+      - "8765:8765"
+      - "8080:8080"
+    environment:
+      - NPCPU_MONITOR_HOST=0.0.0.0
+      - NPCPU_MONITOR_PORT=8765
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost', 8765)); s.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Development Environment
+  # ==========================================================================
+  dev:
+    build:
+      context: .
+      target: development
+    container_name: npcpu-dev
+    volumes:
+      - .:/app
+      - simulation_output:/app/simulation_output
+      - simulation_saves:/app/simulation_saves
+    ports:
+      - "8765:8765"
+      - "8080:8080"
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+  # ==========================================================================
+  # Test Runner
+  # ==========================================================================
+  test:
+    build:
+      context: .
+      target: development
+    container_name: npcpu-test
+    volumes:
+      - .:/app
+    command: pytest tests/ -v --tb=short
+    profiles:
+      - testing
+
+  # ==========================================================================
+  # ChromaDB (Vector Database)
+  # ==========================================================================
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: npcpu-chromadb
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      - ANONYMIZED_TELEMETRY=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - full
+
+volumes:
+  simulation_output:
+    name: npcpu_simulation_output
+  simulation_saves:
+    name: npcpu_simulation_saves
+  chromadb_data:
+    name: npcpu_chromadb_data
+
+networks:
+  default:
+    name: npcpu_network

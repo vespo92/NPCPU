@@ -50,3 +50,7 @@ npcpu_vectors/
 persona_cache/
 npcpu_cache/
 npcpu_swarm_cache/
+# Simulation output
+simulation_output/
+simulation_saves/
+

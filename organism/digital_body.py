@@ -240,15 +240,22 @@ class DigitalBody:
         # Threat detection triggers immune response
         def handle_threat_signal(signal):
             if signal.type == SignalType.PAIN or signal.type == SignalType.REFLEX:
-                self.endocrine.trigger_stress_response(signal.intensity)
-                self.immune.scan(signal.data)
+                # Use priority as intensity proxy, payload as data
+                intensity = signal.priority / 10.0 if signal.priority else 0.5
+                if signal.payload and isinstance(signal.payload, dict):
+                    intensity = signal.payload.get('severity', intensity)
+                self.endocrine.trigger_stress_response(intensity)
+                self.immune.scan(signal.payload)
 
         self.nervous.on_signal_received(handle_threat_signal)
 
         # Reward signals trigger dopamine
         def handle_reward_signal(signal):
             if signal.type == SignalType.REWARD:
-                self.endocrine.trigger_reward(signal.intensity)
+                intensity = signal.priority / 10.0 if signal.priority else 0.5
+                if signal.payload and isinstance(signal.payload, dict):
+                    intensity = signal.payload.get('intensity', intensity)
+                self.endocrine.trigger_reward(intensity)
 
         self.nervous.on_signal_received(handle_reward_signal)
 
@@ -521,8 +528,20 @@ class DigitalBody:
             self.endocrine.trigger_reward(absorbed / amount * 0.2)
         return absorbed
 
-    def damage(self, damage_type: DamageType, severity: float, location: str = ""):
+    def damage(self, damage_type, severity: float, location: str = ""):
         """Apply damage to the organism"""
+        # Handle both DamageType enum and string
+        if isinstance(damage_type, str):
+            try:
+                # Try direct value match first (lowercase)
+                damage_type = DamageType(damage_type.lower())
+            except (ValueError, KeyError):
+                # Try by enum name (uppercase)
+                try:
+                    damage_type = DamageType[damage_type.upper()]
+                except (ValueError, KeyError):
+                    damage_type = DamageType.TRAUMA  # Default
+
         damage = self.repair.detect_damage(
             location=location or "body",
             severity=severity,
@@ -530,11 +549,13 @@ class DigitalBody:
         )
 
         # Trigger pain signal
+        damage_type_value = damage_type.value if hasattr(damage_type, 'value') else str(damage_type)
         self.nervous.send_signal(
-            SignalType.PAIN,
-            target=SystemType.CONSCIOUSNESS,
-            data={"damage": damage.id, "type": damage_type.value},
-            intensity=severity
+            signal_type=SignalType.PAIN,
+            source="immune",
+            target="consciousness",
+            payload={"damage": damage.id, "type": damage_type_value, "severity": severity},
+            priority=int(severity * 10)
         )
 
         # Trigger stress response

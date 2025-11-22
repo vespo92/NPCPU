@@ -1,0 +1,37 @@
+# NPCPU - Non-Player Cognitive Processing Unit
+# Core Requirements
+
+# =============================================================================
+# Required - Core functionality
+# =============================================================================
+numpy>=1.24.0          # Numerical operations for simulations
+
+# =============================================================================
+# Recommended - Enhanced functionality
+# =============================================================================
+pyyaml>=6.0            # Configuration file support
+
+# =============================================================================
+# Optional - Storage backends (install as needed)
+# =============================================================================
+# chromadb>=0.4.0      # Vector database (pip install npcpu[chromadb])
+# pinecone-client>=2.0 # Pinecone cloud storage (pip install npcpu[pinecone])
+
+# =============================================================================
+# Optional - Advanced features
+# =============================================================================
+# scikit-learn>=1.3.0  # ML transformations (pip install npcpu[ml])
+# torch>=2.0.0         # Neural networks (pip install npcpu[neural])
+
+# =============================================================================
+# Optional - Monitoring & Visualization
+# =============================================================================
+# websockets>=12.0     # Real-time monitoring (pip install npcpu[monitoring])
+# matplotlib>=3.7.0    # Plotting (pip install npcpu[viz])
+# rich>=13.0.0         # Beautiful terminal output
+
+# =============================================================================
+# Optional - Web API
+# =============================================================================
+# fastapi>=0.104.0     # REST API (pip install npcpu[api])
+# uvicorn>=0.24.0      # ASGI server

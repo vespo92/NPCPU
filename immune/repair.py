@@ -7,6 +7,9 @@ Implements biological-inspired repair mechanisms including:
 - Redundancy-based repair
 - Regeneration
 - Integrity verification
+- Regeneration cascades
+- Healing factor management
+- Tissue regeneration simulation
 """
 
 import time
@@ -483,6 +486,246 @@ class RepairSystem:
                 for dt in DamageType
             }
         }
+
+
+# ============================================================================
+# Regeneration Cascade
+# ============================================================================
+
+class RegenerationCascade:
+    """
+    Cascading regeneration system for coordinated healing.
+
+    Features:
+    - Multi-stage regeneration
+    - Healing factor management
+    - Resource-aware regeneration
+    - Cascade propagation
+    """
+
+    def __init__(
+        self,
+        healing_factor: float = 1.0,
+        max_cascade_depth: int = 5,
+        energy_per_stage: float = 10.0
+    ):
+        self.healing_factor = healing_factor
+        self.max_cascade_depth = max_cascade_depth
+        self.energy_per_stage = energy_per_stage
+
+        # Active cascades
+        self.active_cascades: Dict[str, 'HealingCascade'] = {}
+
+        # Resource pool
+        self.energy_pool: float = 100.0
+        self.max_energy: float = 100.0
+
+        # Statistics
+        self.cascades_completed = 0
+        self.total_regenerated = 0.0
+
+    def initiate_cascade(
+        self,
+        damage: Damage,
+        repair_system: RepairSystem
+    ) -> 'HealingCascade':
+        """Initiate a regeneration cascade"""
+        cascade = HealingCascade(
+            damage_id=damage.id,
+            origin_location=damage.location,
+            severity=damage.severity,
+            max_depth=self.max_cascade_depth
+        )
+
+        self.active_cascades[cascade.id] = cascade
+
+        # Start first stage
+        self._execute_stage(cascade, repair_system)
+
+        return cascade
+
+    def _execute_stage(
+        self,
+        cascade: 'HealingCascade',
+        repair_system: RepairSystem
+    ) -> bool:
+        """Execute one stage of the cascade"""
+        if cascade.current_depth >= cascade.max_depth:
+            cascade.complete = True
+            return True
+
+        # Check energy
+        required_energy = self.energy_per_stage * (cascade.current_depth + 1)
+        if self.energy_pool < required_energy:
+            cascade.blocked_by_resources = True
+            return False
+
+        # Consume energy
+        self.energy_pool -= required_energy
+
+        # Calculate healing amount
+        stage_healing = (
+            self.healing_factor *
+            (1.0 - cascade.current_depth * 0.15) *
+            cascade.severity
+        )
+
+        cascade.healed_amount += stage_healing
+        cascade.current_depth += 1
+        cascade.stages_completed.append({
+            'depth': cascade.current_depth,
+            'healed': stage_healing,
+            'energy_used': required_energy,
+            'timestamp': time.time()
+        })
+
+        self.total_regenerated += stage_healing
+
+        return False
+
+    def advance_cascades(self, repair_system: RepairSystem):
+        """Advance all active cascades"""
+        completed = []
+
+        for cascade_id, cascade in self.active_cascades.items():
+            if cascade.complete:
+                completed.append(cascade_id)
+                continue
+
+            if self._execute_stage(cascade, repair_system):
+                completed.append(cascade_id)
+                self.cascades_completed += 1
+
+        for cascade_id in completed:
+            if cascade_id in self.active_cascades:
+                del self.active_cascades[cascade_id]
+
+    def regenerate_energy(self, amount: float = 5.0):
+        """Regenerate energy pool"""
+        self.energy_pool = min(self.max_energy, self.energy_pool + amount)
+
+    def get_status(self) -> Dict[str, Any]:
+        """Get cascade status"""
+        return {
+            'active_cascades': len(self.active_cascades),
+            'cascades_completed': self.cascades_completed,
+            'total_regenerated': self.total_regenerated,
+            'energy_pool': self.energy_pool,
+            'healing_factor': self.healing_factor
+        }
+
+
+@dataclass
+class HealingCascade:
+    """A single healing cascade instance"""
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    damage_id: str = ""
+    origin_location: str = ""
+    severity: float = 0.5
+    max_depth: int = 5
+    current_depth: int = 0
+    healed_amount: float = 0.0
+    stages_completed: List[Dict[str, Any]] = field(default_factory=list)
+    started_at: float = field(default_factory=time.time)
+    complete: bool = False
+    blocked_by_resources: bool = False
+
+
+# ============================================================================
+# Tissue Regeneration
+# ============================================================================
+
+class TissueRegenerator:
+    """
+    Tissue-level regeneration for complex damage.
+
+    Simulates biological tissue regeneration:
+    - Stem cell activation
+    - Cell proliferation
+    - Differentiation
+    - Tissue remodeling
+    """
+
+    def __init__(self):
+        self.stem_cell_pool: float = 1.0  # Available stem cells (0-1)
+        self.proliferation_rate: float = 0.1
+        self.differentiation_rate: float = 0.15
+        self.remodeling_rate: float = 0.05
+
+        # Regeneration states
+        self.regenerating_tissues: Dict[str, 'TissueState'] = {}
+
+    def begin_regeneration(
+        self,
+        tissue_id: str,
+        damage_extent: float
+    ) -> 'TissueState':
+        """Begin tissue regeneration"""
+        state = TissueState(
+            tissue_id=tissue_id,
+            damage_extent=damage_extent,
+            stem_cells_allocated=min(self.stem_cell_pool, damage_extent * 0.5)
+        )
+
+        self.stem_cell_pool -= state.stem_cells_allocated
+        self.regenerating_tissues[tissue_id] = state
+
+        return state
+
+    def advance_regeneration(self, tissue_id: str) -> Optional['TissueState']:
+        """Advance regeneration of a tissue"""
+        state = self.regenerating_tissues.get(tissue_id)
+        if not state:
+            return None
+
+        if state.phase == 'activation':
+            state.progress += self.proliferation_rate
+            if state.progress >= 1.0:
+                state.phase = 'proliferation'
+                state.progress = 0.0
+
+        elif state.phase == 'proliferation':
+            state.progress += self.proliferation_rate * state.stem_cells_allocated
+            state.cells_generated += state.stem_cells_allocated * 0.1
+            if state.progress >= 1.0:
+                state.phase = 'differentiation'
+                state.progress = 0.0
+
+        elif state.phase == 'differentiation':
+            state.progress += self.differentiation_rate
+            state.tissue_formed = state.cells_generated * state.progress
+            if state.progress >= 1.0:
+                state.phase = 'remodeling'
+                state.progress = 0.0
+
+        elif state.phase == 'remodeling':
+            state.progress += self.remodeling_rate
+            if state.progress >= 1.0:
+                state.phase = 'complete'
+                state.complete = True
+                # Return stem cells
+                self.stem_cell_pool = min(1.0, self.stem_cell_pool + state.stem_cells_allocated * 0.5)
+                del self.regenerating_tissues[tissue_id]
+
+        return state
+
+    def regenerate_stem_cells(self, amount: float = 0.05):
+        """Regenerate stem cell pool"""
+        self.stem_cell_pool = min(1.0, self.stem_cell_pool + amount)
+
+
+@dataclass
+class TissueState:
+    """State of tissue regeneration"""
+    tissue_id: str = ""
+    damage_extent: float = 0.0
+    stem_cells_allocated: float = 0.0
+    phase: str = "activation"
+    progress: float = 0.0
+    cells_generated: float = 0.0
+    tissue_formed: float = 0.0
+    complete: bool = False
+    started_at: float = field(default_factory=time.time)
 
 
 # ============================================================================

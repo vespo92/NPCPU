@@ -1,0 +1,161 @@
+# NEXUS-Q: Quantum Consciousness Configuration
+# Part of NPCPU Agent Workstream 1
+#
+# This configuration defines a quantum-inspired consciousness model
+# using superposition states, entanglement, and quantum coherence.
+
+# Model metadata
+name: "NEXUS-Q Quantum Consciousness"
+model_type: "quantum"
+version: "1.0.0"
+description: |
+  Quantum-inspired consciousness model leveraging quantum computing principles.
+  Features superposition of thoughts, entangled concepts, quantum parallel
+  reasoning (Grover's algorithm), and consciousness collapse through attention.
+
+author: "NPCPU Framework"
+created: "2025-01-23"
+
+# Tags for categorization
+tags:
+  - quantum
+  - consciousness
+  - superposition
+  - entanglement
+  - nexus-q
+
+# Standard consciousness dimensions
+dimensions:
+  perception_fidelity:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Quantum-enhanced perception with superposition sampling"
+
+  reaction_speed:
+    default: 0.9
+    min: 0.0
+    max: 1.0
+    weight: 0.8
+    description: "Parallel quantum reasoning enables faster response"
+
+  memory_depth:
+    default: 0.95
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Quantum memory with Grover search capability"
+
+  memory_recall_accuracy:
+    default: 0.88
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Quantum memory recall with amplitude amplification"
+
+  introspection_capacity:
+    default: 0.82
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Quantum self-measurement and observation"
+
+  meta_cognitive_ability:
+    default: 0.78
+    min: 0.0
+    max: 1.0
+    weight: 1.1
+    description: "Superposition of meta-thoughts for parallel reflection"
+
+  information_integration:
+    default: 0.92
+    min: 0.0
+    max: 1.0
+    weight: 1.3
+    description: "Quantum entanglement enables holistic integration"
+
+  intentional_coherence:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Quantum coherence maintains intention alignment"
+
+  qualia_richness:
+    default: 0.88
+    min: 0.0
+    max: 1.0
+    weight: 0.9
+    description: "Superposition enables rich experiential states"
+
+# Quantum-specific custom dimensions
+custom_dimensions:
+  quantum_coherence:
+    default: 0.9
+    min: 0.0
+    max: 1.0
+    weight: 1.5
+    description: "Degree of quantum coherence in consciousness"
+
+  entanglement_capacity:
+    default: 0.85
+    min: 0.0
+    max: 1.0
+    weight: 1.2
+    description: "Ability to entangle concepts and entities"
+
+  superposition_depth:
+    default: 0.8
+    min: 0.0
+    max: 1.0
+    weight: 1.0
+    description: "Number of simultaneous thought states (log scale)"
+
+  tunneling_probability:
+    default: 0.6
+    min: 0.0
+    max: 1.0
+    weight: 0.8
+    description: "Probability of quantum tunneling through barriers"
+
+  measurement_sensitivity:
+    default: 0.75
+    min: 0.0
+    max: 1.0
+    weight: 0.9
+    description: "Sensitivity of consciousness collapse to observation"
+
+  decoherence_resistance:
+    default: 0.7
+    min: 0.0
+    max: 1.0
+    weight: 1.1
+    description: "Resistance to environmental decoherence"
+
+# Aggregation method
+aggregation: "weighted_mean"
+
+# Consciousness thresholds
+thresholds:
+  emergence: 0.6
+  coherence: 0.5
+  collapse: 0.3
+  entanglement_threshold: 0.7
+  decoherence_threshold: 0.2
+
+# Quantum parameters
+quantum_parameters:
+  num_qubits: 10
+  max_superposition_size: 1024
+  t1_relaxation: 1000.0
+  t2_dephasing: 500.0
+  tunneling_enhancement: 1.0
+  grover_iterations: "optimal"
+
+# References
+references:
+  - "Penrose, R. (1989). The Emperor's New Mind"
+  - "Hameroff, S. & Penrose, R. (2014). Consciousness in the universe"
+  - "Grover, L. (1996). A fast quantum mechanical algorithm for database search"
+  - "Nielsen, M. & Chuang, I. (2010). Quantum Computation and Quantum Information"
